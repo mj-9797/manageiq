@@ -1,5 +1,6 @@
 ---
 language: ruby
+
 rvm:
 - 2.5.8
 - 2.6.6
@@ -15,14 +16,63 @@ env:
   - TEST_SUITE=brakeman
 matrix:
   fast_finish: true
+  include:
+  - sudo: required
+    group: edge
+    virt: lxd
+    dist: bionic
+    arch: arm64-graviton2
+    rvm: 2.5.8
+    env:
+    - RUBY_GC_HEAP_GROWTH_MAX_SLOTS=300000
+    - RUBY_GC_HEAP_INIT_SLOTS=600000
+    - RUBY_GC_HEAP_GROWTH_FACTOR=1.25
+    - PARALLEL_TEST_PROCESSORS=2
+    - TEST_SUITE=vmdb PARALLEL=true
+  - sudo: required
+    group: edge
+    virt: lxd
+    dist: bionic
+    arch: arm64-graviton2
+    rvm: 2.5.8
+    env:
+    - RUBY_GC_HEAP_GROWTH_MAX_SLOTS=300000
+    - RUBY_GC_HEAP_INIT_SLOTS=600000
+    - RUBY_GC_HEAP_GROWTH_FACTOR=1.25
+    - PARALLEL_TEST_PROCESSORS=2
+    - TEST_SUITE=brakeman
+  - sudo: required
+    group: edge
+    virt: lxd
+    dist: bionic
+    arch: arm64-graviton2
+    rvm: 2.6.6
+    env:
+    - RUBY_GC_HEAP_GROWTH_MAX_SLOTS=300000
+    - RUBY_GC_HEAP_INIT_SLOTS=600000
+    - RUBY_GC_HEAP_GROWTH_FACTOR=1.25
+    - PARALLEL_TEST_PROCESSORS=2
+    - TEST_SUITE=vmdb PARALLEL=true
+  - sudo: required
+    group: edge
+    virt: lxd
+    dist: bionic
+    arch: arm64-graviton2
+    rvm: 2.6.6
+    env:
+    - RUBY_GC_HEAP_GROWTH_MAX_SLOTS=300000
+    - RUBY_GC_HEAP_INIT_SLOTS=600000
+    - RUBY_GC_HEAP_GROWTH_FACTOR=1.25
+    - PARALLEL_TEST_PROCESSORS=2
+    - TEST_SUITE=brakeman
 addons:
   postgresql: '10'
 before_install:
-- source ${TRAVIS_BUILD_DIR}/tools/ci/before_install.sh
+- time source ${TRAVIS_BUILD_DIR}/tools/ci/before_install.sh
 before_script:
-- bundle exec rake test:$TEST_SUITE:setup
+- time bundle exec rake test:$TEST_SUITE:setup
 script:
-- bundle exec rake test:$TEST_SUITE
+- time bundle exec rake test:$TEST_SUITE
 after_failure:
 - source ${TRAVIS_BUILD_DIR}/tools/ci/after_failure.sh
 notifications:

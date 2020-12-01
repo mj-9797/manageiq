@@ -68,11 +68,11 @@ matrix:
 addons:
   postgresql: '10'
 before_install:
-- source ${TRAVIS_BUILD_DIR}/tools/ci/before_install.sh
+- time source ${TRAVIS_BUILD_DIR}/tools/ci/before_install.sh
 before_script:
-- bundle exec rake test:$TEST_SUITE:setup
+- time bundle exec rake test:$TEST_SUITE:setup
 script:
-- bundle exec rake test:$TEST_SUITE
+- time bundle exec rake test:$TEST_SUITE
 after_failure:
 - source ${TRAVIS_BUILD_DIR}/tools/ci/after_failure.sh
 notifications:
